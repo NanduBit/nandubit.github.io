@@ -124,11 +124,31 @@ main {
   background-color: black;
   border-radius: 0.75rem;
   padding: 1.5rem 0.75rem 0.75rem; /* Increased top padding */
-  overflow: auto;
-  max-height: 20rem;
-  min-height: 13rem;
+  overflow: hidden;
   position: relative;
   border: 2px solid #111827;
+  max-height: 20rem;
+}
+
+.projects-section {
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.projects-section::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.activities-section {
+  min-height: auto;
+  max-height: 20rem;
+  padding: 1.5rem 0.75rem 0.75rem 0.5rem;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.activities-section::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 /* Section title styling */
@@ -148,11 +168,13 @@ main {
   display: inline-block;
 }
 
-.posts-list {
+.posts-list,
+.projects-list {
   list-style-type: none; /* Remove bullets from list */
 }
 
-.post-link {
+.post-link,
+.project-link {
   color: #9ca3af;
   background-color: black;
   border: 2px solid black;
@@ -161,15 +183,18 @@ main {
   padding: 0.625rem;
   border-radius: 0.375rem;
   transition: all 0.15s;
+  width: 100%;
 }
 
-.post-link:hover {
+.post-link:hover,
+.project-link:hover {
   color: #6b7280;
   background-color: #111827;
   border-color: #1f2937;
 }
 
-.post-content {
+.post-content,
+.project-content {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -177,34 +202,72 @@ main {
   gap: 0.5rem;
 }
 
-.post-icon {
+.post-icon,
+.project-icon {
+  position: relative;
   flex-shrink: 0;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2.2rem;
+  height: 2.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 0.5rem;
+  z-index: 2;
 }
 
-.post-details {
+.project-icon:before {
+  content: '';
+  position: absolute;
+  width: 1.8rem;
+  height: 1.8rem;
+  background: black;
+  border: 2px solid #111827;
+  border-radius: 0.25rem;
+  z-index: -1;
+}
+
+.project-icon svg {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+}
+
+.post-details,
+.project-details {
   flex: 1;
   min-width: 0;
 }
 
-.post-title {
+.post-title,
+.project-title {
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
-.post-date {
+.project-description {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.post-date,
+.project-date {
   margin-left: 1rem;
   font-weight: 400;
   font-size: 0.875rem;
 }
 
-.post-divider {
+.post-divider,
+.project-divider {
   border: 1px solid #111827;
   margin-bottom: 0;
 }
@@ -220,9 +283,10 @@ main {
 .spinner {
   animation: spin 1s linear infinite;
   border-radius: 9999px;
-  height: 2rem;
-  width: 2rem;
+  height: 1rem;
+  width: 1rem;
   border-bottom: 2px solid #9ca3af;
+  margin: 0 auto;
 }
 
 @keyframes spin {
@@ -283,13 +347,135 @@ main {
 
 .status-title {
   font-weight: 600;
-  color: #9ca3af;
+  color: #e5e7eb;
   font-size: 1rem;
+  margin-bottom: 0.1rem;
 }
 
 .status-description {
   color: #4b5563;
   font-size: 0.875rem;
+}
+
+/* Activity Section Styles - Timeline Based */
+.activities-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+/* Timeline vertical line */
+.activities-list:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.1rem;
+  width: 2px;
+  background: #111827;
+  z-index: 1;
+}
+
+.activity-item {
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Hide the last divider */
+.activity-item:last-child .activity-divider {
+  display: none;
+}
+
+.activity-content {
+  color: #9ca3af;
+  background-color: black;
+  border: 1px solid #111827;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  padding-right: 4.5rem; /* Add padding on the right to make room for the date */
+  border-radius: 0.375rem;
+  transition: all 0.15s;
+  width: 100%;
+  position: relative; /* Make it a positioning context for the date */
+}
+
+.activity-content:hover {
+  color: #6b7280;
+  background-color: #0c0c0c;
+  border-color: #1f2937;
+}
+
+.activity-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.activity-icon:before {
+  content: '';
+  position: absolute;
+  width: 1.8rem;
+  height: 1.8rem;
+  background: black;
+  border: 2px solid #111827;
+  border-radius: 0.25rem;
+  z-index: -1;
+}
+
+.activity-icon svg {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+}
+
+.activity-details {
+  flex: 1;
+  min-width: 0;
+  padding-left: 0.2rem;
+}
+
+.activity-title {
+  font-weight: 600;
+  color: #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.activity-description {
+  color: #6b7280;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.activity-time {
+  color: #4b5563;
+  font-size: 0.7rem;
+  line-height: 1;
+  opacity: 0.8;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+}
+
+.activity-divider {
+  display: none; /* Hide standard dividers since we're using the timeline */
 }
 
 /* Footer */
@@ -371,12 +557,18 @@ footer {
     grid-template-columns: repeat(10, minmax(0, 1fr));
   }
   
-  .posts-section-container {
+  .posts-section-container,
+  .projects-section-container {
     grid-column: span 6 / span 6;
   }
   
   .activities-section-container {
     grid-column: span 4 / span 4;
+  }
+  
+  /* Ensure both sections have the same height */
+  .posts-section, .projects-section, .activities-section {
+    height: 20rem;
   }
   
   .status-section-container {
