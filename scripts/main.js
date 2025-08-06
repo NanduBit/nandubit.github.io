@@ -1,8 +1,39 @@
 // main.js - Handles website interactivity
 
+// Track loading states
+let states = {
+  githubFetched: false,
+  minTimeElapsed: false,
+  domLoaded: false
+};
+
+// Create a function to hide the loader when all conditions are met
+function checkAndHideLoader() {
+  if (states.githubFetched && states.minTimeElapsed && states.domLoaded) {
+    document.body.classList.add('loaded');
+    console.log('Website fully loaded and displayed');
+  }
+}
+
+// Set a minimum time of 5 seconds before allowing the loader to hide
+setTimeout(() => {
+  states.minTimeElapsed = true;
+  checkAndHideLoader();
+}, 2000); // 2 seconds artificial delay
+
+// Fallback: Force hide loader after 10 seconds maximum
+setTimeout(() => {
+  document.body.classList.add('loaded');
+  console.log('Loader hidden by force timeout');
+}, 7000); // 7 seconds maximum timeout
+
+// When DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Website loaded successfully');
+  states.domLoaded = true;
+  checkAndHideLoader();
   
+  // Start GitHub fetch immediately
+  fetchGitHubActivities();
   
   // Function to fetch and display GitHub activities
   function fetchGitHubActivities() {
@@ -36,6 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(data => {
         displayGitHubActivities(data, activitiesSection);
+        // Mark GitHub fetch as complete
+        states.githubFetched = true;
+        checkAndHideLoader();
       })
       .catch(error => {
         console.error('Error fetching GitHub activities:', error);
@@ -56,6 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </li>
         `;
+        // Mark GitHub fetch as complete even on error
+        states.githubFetched = true;
+        checkAndHideLoader();
       });
   }
   
@@ -219,6 +256,5 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${day}-${month}-${year}`;
   }
   
-  // Run the function to fetch GitHub activities
-  fetchGitHubActivities();
+  // Note: fetchGitHubActivities is already called earlier
 });

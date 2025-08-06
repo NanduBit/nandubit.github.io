@@ -1,12 +1,5 @@
 /* Main styles for the website */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('../assets/inter-font.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
+/* Using Google Fonts instead of local font file */
 
 /* Reset & Base Styles */
 * {
@@ -51,11 +44,13 @@ main {
   display: flex;
   gap: 2rem;
   margin-bottom: 2.5rem;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .hero-content {
-  max-width: 48rem;
+  max-width: 65%;
   font-weight: 600;
   line-height: 2.25rem;
   letter-spacing: -0.05em;
@@ -98,6 +93,19 @@ main {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Mobile optimization for hero section */
+@media (max-width: 767px) {
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .hero-content {
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+}
+
 @keyframes pulse {
   50% {
     opacity: 0.5;
@@ -108,15 +116,15 @@ main {
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem 2rem; /* Adjusted vertical gap */
+  gap: 0.5rem 2rem; /* Reduced vertical gap */
   width: 100%;
 }
 
 /* Section container and title styling */
 .section-container {
   position: relative;
-  margin-bottom: 1.5rem;
-  margin-top: 1.25rem; /* Adjusted margin-top for spacing */
+  margin-bottom: 0.75rem;
+  margin-top: 0.75rem; /* Reduced margin-top for less spacing */
 }
 
 /* Post Section */
@@ -189,8 +197,7 @@ main {
 .post-link:hover,
 .project-link:hover {
   color: #6b7280;
-  background-color: #111827;
-  border-color: #1f2937;
+  background-color: #0c0c0c;
 }
 
 .post-content,
@@ -289,6 +296,113 @@ main {
   margin: 0 auto;
 }
 
+/* Full Page Loader */
+.full-page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+/* Adjust positioning of the spinner in the loader */
+.full-page-loader .custom-spinner {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+/* Hide the loader when page is ready */
+.loaded .full-page-loader {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Custom spinner from UIVerse.io by satyamchaudharydev */
+.custom-spinner {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.custom-spinner span {
+  position: absolute;
+  top: 50%;
+  left: var(--left);
+  width: 35px;
+  height: 7px;
+  background: #ffff;
+  animation: dominos 1s ease infinite;
+  box-shadow: 2px 2px 3px 0px black;
+}
+
+.custom-spinner span:nth-child(1) {
+  --left: 40px;
+  animation-delay: 0.125s;
+}
+
+.custom-spinner span:nth-child(2) {
+  --left: 30px;
+  animation-delay: 0.3s;
+}
+
+.custom-spinner span:nth-child(3) {
+  left: 20px;
+  animation-delay: 0.425s;
+}
+
+.custom-spinner span:nth-child(4) {
+  animation-delay: 0.54s;
+  left: 10px;
+}
+
+.custom-spinner span:nth-child(5) {
+  animation-delay: 0.665s;
+  left: 0px;
+}
+
+.custom-spinner span:nth-child(6) {
+  animation-delay: 0.79s;
+  left: -10px;
+}
+
+.custom-spinner span:nth-child(7) {
+  animation-delay: 0.915s;
+  left: -20px;
+}
+
+.custom-spinner span:nth-child(8) {
+  left: -30px;
+}
+
+/* Dominos animation for the custom spinner */
+@keyframes dominos {
+  50% {
+    opacity: 0.7;
+  }
+
+  75% {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+
+  80% {
+    opacity: 1;
+  }
+}
+
+/* Keep the original spin animation for other potential uses */
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -303,39 +417,42 @@ main {
   border-radius: 0.75rem;
   border: 2px solid #111827;
   background-color: black;
-  padding: 1rem 0.75rem 0.5rem; /* Adjusted padding to match other sections */
+  padding: 1rem 1rem; /* Increased vertical padding */
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .status-content {
   display: flex;
-  height: 100%;
   width: 100%;
   align-items: center;
-  padding: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding: 0;
+  margin: auto 0; /* Center vertically */
 }
 
 .status-item {
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
+  gap: 1.25rem;
   border-radius: 0.375rem;
+  padding: 0.25rem 0; /* Add a bit of vertical padding inside */
 }
 
 .status-icon {
+  position: relative;
   display: flex;
-  height: 4rem;
-  width: 4rem;
+  height: 3rem;
+  width: 3rem;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .status-icon svg {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: 1.75rem;
+  width: 1.75rem;
   color: #9ca3af;
 }
 
@@ -343,18 +460,24 @@ main {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0.2rem 0;
 }
 
 .status-title {
   font-weight: 600;
   color: #e5e7eb;
-  font-size: 1rem;
-  margin-bottom: 0.1rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+  text-align: left;
 }
 
 .status-description {
   color: #4b5563;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  text-align: left;
 }
 
 /* Activity Section Styles - Timeline Based */
@@ -405,7 +528,6 @@ main {
 .activity-content:hover {
   color: #6b7280;
   background-color: #0c0c0c;
-  border-color: #1f2937;
 }
 
 .activity-icon {
@@ -573,6 +695,8 @@ footer {
   
   .status-section-container {
     grid-column: span 5 / span 5;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
   }
   
   .footer-content {
