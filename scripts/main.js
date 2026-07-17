@@ -15,17 +15,17 @@ function checkAndHideLoader() {
   }
 }
 
-// Set a minimum time of 5 seconds before allowing the loader to hide
+// Set a short minimum time before allowing the loader to hide
 setTimeout(() => {
   states.minTimeElapsed = true;
   checkAndHideLoader();
-}, 2000); // 2 seconds artificial delay
+}, 300);
 
-// Fallback: Force hide loader after 10 seconds maximum
+// Fallback: Force hide loader after 5 seconds maximum
 setTimeout(() => {
   document.body.classList.add('loaded');
   console.log('Loader hidden by force timeout');
-}, 7000); // 7 seconds maximum timeout
+}, 5000);
 
 // When DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -139,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Format date
     const date = new Date(activity.created_at);
     const formattedDate = formatDate(date);
+    const isoDate = date.toISOString();
     
     // Get activity details based on type
     const { icon, title, description } = getActivityDetails(activity);
@@ -151,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="activity-details">
           <p class="activity-title">${title}</p>
           <p class="activity-description">${description}</p>
-          <time class="activity-time">${formattedDate}</time>
+          <time class="activity-time" datetime="${isoDate}" title="${isoDate}">${formattedDate}</time>
         </div>
       </div>
       <hr class="activity-divider" />
