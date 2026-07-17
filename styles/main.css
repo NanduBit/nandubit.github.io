@@ -24,6 +24,11 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible {
+  outline: 2px solid #9ca3af;
+  outline-offset: 2px;
+}
+
 /* Layout */
 .container {
   max-width: 60rem;
@@ -729,6 +734,15 @@ footer {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Black Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -753,4 +767,3 @@ footer {
   height: 0;
   width: 0;
 }
-
