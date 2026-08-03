@@ -4,12 +4,13 @@
 let states = {
   githubFetched: false,
   minTimeElapsed: false,
-  domLoaded: false
+  domLoaded: false,
+  contentRendered: false
 };
 
 // Create a function to hide the loader when all conditions are met
 function checkAndHideLoader() {
-  if (states.githubFetched && states.minTimeElapsed && states.domLoaded) {
+  if (states.githubFetched && states.minTimeElapsed && states.domLoaded && states.contentRendered) {
     document.body.classList.add('loaded');
     console.log('Website fully loaded and displayed');
   }
@@ -29,11 +30,75 @@ setTimeout(() => {
 
 // When DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
+  hydrateSocialLinks();
+  renderProjects();
   states.domLoaded = true;
   checkAndHideLoader();
   
   // Start GitHub fetch immediately
   fetchGitHubActivities();
+
+  function hydrateSocialLinks() {
+    const config = window.siteConfig || {};
+    const socialLinks = Array.isArray(config.socialLinks) ? config.socialLinks : [];
+
+    if (socialLinks.length < 2) {
+      states.contentRendered = true;
+      checkAndHideLoader();
+      return;
+    }
+
+    const socialAnchors = document.querySelectorAll('.social-links a.social-link');
+    socialAnchors.forEach((anchor, index) => {
+      const socialLink = socialLinks[index];
+      if (!socialLink) return;
+      anchor.href = socialLink.href;
+      anchor.setAttribute('aria-label', socialLink.label);
+    });
+
+    states.contentRendered = true;
+    checkAndHideLoader();
+  }
+
+  function renderProjects() {
+    const projectsSection = document.getElementById('projects-content');
+    const projects = window.siteConfig && Array.isArray(window.siteConfig.projects)
+      ? window.siteConfig.projects
+      : [];
+
+    if (!projectsSection) return;
+
+    if (projects.length === 0) {
+      projectsSection.innerHTML = `
+        <li class="project-item">
+          <div class="project-content">
+            <div class="project-details">
+              <p class="project-title">No projects yet</p>
+              <p class="project-description">Add entries to scripts/config.js to display them here.</p>
+            </div>
+          </div>
+        </li>
+      `;
+      return;
+    }
+
+    projectsSection.innerHTML = projects.map(project => `
+      <li class="project-item">
+        <a class="project-link" href="${project.url}" target="_blank" rel="noopener noreferrer">
+          <div class="project-content">
+            <div class="project-icon">
+              ${project.icon}
+            </div>
+            <div class="project-details">
+              <p class="project-title" title="${project.title}">${project.name}</p>
+              <p class="project-description">${project.description}</p>
+            </div>
+          </div>
+        </a>
+        <hr class="project-divider" />
+      </li>
+    `).join('');
+  }
   
   // Function to fetch and display GitHub activities
   function fetchGitHubActivities() {
